@@ -1,0 +1,203 @@
+*{margin: 0; padding: 0;}
+body{ font-size: 12px; }
+li{ list-style: none;}
+a{ text-decoration: none;}
+
+/*********************************************菜单样式*********************************************/
+.menu-container {
+    font-family: Microsoft YaHei;
+}
+/**********************菜单样式fold**********************/
+/*一级菜单默认样式*/
+.menu-container ul.menu-root > li.md{
+    width: 200px;
+    text-align: left;
+    position: relative;
+    font-family: Microsoft YaHei;
+}
+/*一级菜单文本样式*/
+.menu-container ul.menu-root > li.md > a {
+    font-size: 14px;
+    font-weight: bold;
+}
+/*一级菜单图标文本对齐样式-没有图标*/
+.menu-container ul.menu-root > li.md > a.no-icon > span.menu-text{
+    margin-left: 45px;
+}
+/*一级菜单图标文本对齐样式-text*/
+.menu-container ul.menu-root > li.md > a.md > .menu-text{
+    line-height: 40px;
+    margin-left: 5px;
+}
+/*一级菜单图标文本对齐样式-img*/
+.menu-container ul.menu-root > li.md > a.md > img.menu-icon {
+    height: 15px;
+    width: 15px;
+    border-radius: 5px;
+    float: left;
+    margin: 13px 0 0px 25px;
+}
+/*一级菜单图标文本对齐样式-fontsome*/
+.menu-container ul.menu-root > li.md > a.md >  i.fa {
+    border-radius: 5px;
+    float: left;
+    margin: 13px 0 0 25px;
+}
+/*二级及以下级别菜单样式，菜单宽度200px，和子级右悬浮位置要一样（position right -200px）*/
+.menu-container ul.menu-root > li.md > ul li.md{
+    width: 200px;
+    text-align: left;
+    position: relative;
+}
+/*二级及以下级别菜单文本样式*/
+.menu-container ul.menu-root > li.md > ul > li a.md {
+    font-size: 13px;
+    font-weight: bold;
+}
+/*二级及以下级别菜单图标文本对齐样式-没有图标*/
+.menu-container ul.menu-root > li.md > ul > li.md a.md.no-icon > span.menu-text {
+    margin-left: 27px;
+}
+/*二级及以下级别菜单图标文本对齐样式-text*/
+.menu-container ul.menu-root > li.md > ul.md > li a.md > .menu-text{
+    line-height: 40px;
+    margin-left: 5px;
+}
+/*二级及以下级别菜单图标文本对齐样式-img*/
+.menu-container ul.menu-root > li.md > ul a.md img.menu-icon {
+    height: 13px;
+    width: 13px;
+    margin: 13px 0 0 8px;
+}
+/*二级及以下级别菜单图标文本对齐样式-fontsome*/
+.menu-container ul.menu-root > li.md > ul a.md i.fa {
+    font-size: 13px;
+    margin: 13px 0 0 10px;
+}
+
+/* 1级菜单默认样式*/
+.menu-container ul.menu-root > li.md{
+    background: #23272D;
+}
+/* 2级菜单默认样式*/
+.menu-container ul.menu-root > li.md > ul li.md{
+    background: #2A2E36;
+}
+/* 3级菜单默认样式*/
+.menu-container ul.menu-root > li.md > ul > li > ul li.md{
+    background: #2A2E36;
+}
+/* 4级菜单默认样式*/
+.menu-container ul.menu-root > li.md > ul > li > ul > li > ul li.md{
+    background: #2A2E36;
+}
+/* 5级菜单默认样式 如果有更深子菜单，以此类推*/
+.menu-container ul.menu-root > li.md > ul > li > ul > li > ul > li > ul li.md{
+    background: #2A2E36;
+}
+
+/*默认菜单文本样式*/
+.menu-container li.md > a.md{
+    color: #aaa;
+}
+/*点击选择菜单样式*/
+.menu-container li.md > a.md.selected{
+    color: #fff;
+}
+/*标记选择样式*/
+.menu-container li.md > .hover-sign{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 100%;
+}
+/*鼠标放上 标记选择样式*/
+.menu-container li.md.hover-on > .hover-sign{
+    border-left: 3px solid #1A7AB9;
+}
+/*鼠标放上 菜单文本样式*/
+.menu-container li.md.hover-on > a.md{
+    color: #1A7AB9;
+}
+/*二级及以下级别菜单容器初始样式*/
+.menu-container ul.menu-root > li.md > ul.md{
+    display: none;
+}
+/*展开折叠的箭头*/
+.menu-container li.md span.arrow{
+    position: absolute;
+    display: block;
+    right:10px;
+    top: 0;
+    width: 10px;
+    height: 40px;
+}
+/*展开折叠的箭头-折叠*/
+.menu-container ul.menu-root li.md > a > span.arrow.md{
+    background: url(images/arrows.png) no-repeat center center;
+}
+/*展开折叠的箭头-展开*/
+.menu-container ul.menu-root li.md.open > a > span.arrow.md{
+    background: url(images/arrows-on.png) no-repeat center center;
+}
+
+/*展开折叠浮动菜单的箭头-折叠*/
+.menu-container ul.menu-root li.md > a > span.arrow.md.mdt{
+    background: url(images/arrows-mdt.png) no-repeat center center;
+}
+/*展开折叠浮动菜单的箭头-展开*/
+.menu-container ul.menu-root li.md.open > a > span.arrow.md.mdt{
+    background: url(images/arrows-mdt-on.png) no-repeat center center;
+}
+
+/**********************菜单样式folt*********************/
+/*第一级浮动菜单ul*/
+.menu-container ul.menu-root > li ul.mdt{
+    display: none;
+    position: fixed;
+    top: 21px;
+    left: 200px;
+    height: 100%;
+    width: 300px;
+    background-color: #eeeeee;
+}
+/*li样式*/
+.menu-container ul.menu-root ul.mdt li.mt{
+    float: left;
+    left: 10px;
+}
+/*含有子菜单的li样式*/
+.menu-container ul.menu-root ul.mdt li.mt.dropdown-menu{
+    display: block;
+    width: 100%;
+}
+/*不含有子菜单的li样式*/
+.menu-container ul.menu-root ul.mdt li.mt.direct-menu{
+    margin-right: 10px;
+    padding: 8px 0 8px 0;
+}
+/*菜单项-hover*/
+.menu-container ul.menu-root ul.mdt li.mt.direct-menu:hover{
+    background-color: #1A7AB9;
+}
+/*菜单项-hover*/
+.menu-container ul.menu-root ul.mdt li.mt.direct-menu:hover > a{
+    color: #fff;
+}
+/*图菜单标-img*/
+.menu-container ul.menu-root ul.mdt li.mt > a > img.menu-icon{
+    height: 13px;
+    width: 13px;
+    margin: 0 3px 0 0;
+    float: left;
+}
+/*图菜单标-fontaswsome*/
+.menu-container ul.menu-root ul.mdt li.mt > a > i.fa{
+    margin: 0 3px 0 0;
+    float: left;
+}
+/*含有子菜单的直接ul样式*/
+.menu-container ul.menu-root ul.mdt li.mt.dropdown-menu > ul.mt{
+    padding-left: 20px;
+}

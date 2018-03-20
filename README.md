@@ -21,8 +21,8 @@
  *                  menuRootId：         菜单根节点id，控件根据该id，生成所有子节点的菜单,默认""
  *                  startFloatLevel：    开始浮动的菜单层级，number，从2开始取值（1级菜单固定，不允许浮动）。默认0，不浮动
  *                  retract：            子菜单缩进像素值（number），默认20
- *                  foldTime：           子菜单折叠动画时间值（number，毫秒），默认10
- *                  unFoldTime：         子菜单展开动画时间值（number，毫秒），默认500
+ *                  foldTime：           子菜单折叠动画时间值（number，毫秒），默认200
+ *                  unFoldTime：         子菜单展开动画时间值（number，毫秒），默认200
  *                  headerText：         菜单header文本，默认"",
  *                  onlyUnfold ：        一级菜单是否始终只展开一个节点，默认true
  *                  remberFlodState ：   是否记住子节点的折叠展开状态，默认false
@@ -37,6 +37,8 @@
  *  暴露方法：
  *  	search：过滤搜索菜单，并重新渲染
  *  		用法：$(selector).mrkMenu("search",searchText)
+ *  	getFilterData：	根据搜索条件,返回过滤菜单数据
+ *          用法：$(selector).mrkMenu("getFilterData",searchText)
  *
  *
  * @author jiangbaojun

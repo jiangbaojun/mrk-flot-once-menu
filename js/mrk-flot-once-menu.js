@@ -28,8 +28,8 @@
  *                  menuRootId：         菜单根节点id，控件根据该id，生成所有子节点的菜单,默认""
  *                  startFloatLevel：    开始浮动的菜单层级，number，从2开始取值（1级菜单固定，不允许浮动）。默认0，不浮动
  *                  retract：            子菜单缩进像素值（number），默认20
- *                  foldTime：           子菜单折叠动画时间值（number，毫秒），默认10
- *                  unFoldTime：         子菜单展开动画时间值（number，毫秒），默认500
+ *                  foldTime：           子菜单折叠动画时间值（number，毫秒），默认200
+ *                  unFoldTime：         子菜单展开动画时间值（number，毫秒），默认200
  *                  headerText：         菜单header文本，默认"",
  *                  onlyUnfold ：        一级菜单是否始终只展开一个节点，默认true
  *                  remberFlodState ：   是否记住子节点的折叠展开状态，默认false
@@ -44,6 +44,8 @@
  *  暴露方法：
  *  	search：过滤搜索菜单，并重新渲染
  *  		用法：$(selector).mrkMenu("search",searchText)
+ *  	getFilterData：	根据搜索条件,返回过滤菜单数据
+ *          用法：$(selector).mrkMenu("getFilterData",searchText)
  *
  *
  * @author jiangbaojun
@@ -80,6 +82,10 @@
 			//根据搜索条件过滤菜单数据
 	        activeOptions = filterMenuData(activeOptions);
 			init(target, text);
+		},
+		"getFilterData": function(target, text){
+			//根据搜索条件,返回过滤菜单数据
+            return getFilterData(activeOptions.originData, text)
 		}
 	};
     /**
@@ -136,23 +142,12 @@
     function filterMenuData(activeOptions){
     	var searchText = activeOptions.searchText;
     	var menuData = activeOptions.originData;
-    	var filterData = [];
     	if(searchText==null || searchText==undefined || searchText==""){
             activeOptions.menuData = activeOptions.originData;
             activeOptions.menuRootId = activeOptions.originMenuRootId;
     		return activeOptions;
     	}
-    	var reg = new RegExp(searchText);
-    	//获得所有直接节点数组
-    	for(var i=0;i<menuData.length;i++){
-    		var item = menuData[i];
-    		if(reg.test(item.title) && !hasChildren(menuData,item.id)){
-    			if(!activeOptions.searchResultToTree){
-    				item.parentId=activeOptions.searchPid;
-    			}
-    			filterData.push(item);
-    		}
-    	}
+        var filterData = getFilterData(menuData, searchText);
     	if(activeOptions.searchResultToTree){
     		//树形结果展示，需要获得所有父节点
     		activeOptions.menuData = getAllParents(filterData);
@@ -161,6 +156,31 @@
     		activeOptions.menuData = filterData;
     	}
     	return activeOptions;
+    }
+
+    /**
+     * 根据过滤条件，获得直接节点数据
+     * @param menuData      菜单数据
+     * @param searchText    搜索文本
+     * @returns {*}
+     */
+    function getFilterData(menuData, searchText){
+        if(searchText==null || searchText==undefined || searchText==""){
+            return menuData;
+        }
+        var filterData = [];
+        var reg = new RegExp(searchText);
+        //获得所有直接节点数组
+        for(var i=0;i<menuData.length;i++){
+            var item = menuData[i];
+            if(reg.test(item.title) && !hasChildren(menuData,item.id)){
+                if(!activeOptions.searchResultToTree){
+                    item.parentId=activeOptions.searchPid;
+                }
+                filterData.push(item);
+            }
+        }
+        return filterData;
     }
 
     /**

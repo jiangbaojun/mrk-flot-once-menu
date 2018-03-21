@@ -33,6 +33,7 @@
  *                  headerText：         菜单header文本，默认"",
  *                  onlyUnfold ：        一级菜单是否始终只展开一个节点，默认true
  *                  remberFlodState ：   是否记住子节点的折叠展开状态，默认false
+ *                  forceRemberSonFlodState ：   强制记住子节点展开状态，点击一级菜单还原。默认true
  *                  searchResultToTree： 每次过滤搜索，是否以树形展示过滤结果，默认false
  *                  onClickMenu:	     事件，点击菜单节点时的回调函数。
  *                                          function(data)，data为回调函数参数，object，字段如下：
@@ -46,6 +47,8 @@
  *  		用法：$(selector).mrkMenu("search",searchText)
  *  	getFilterData：	根据搜索条件,返回过滤菜单数据
  *          用法：$(selector).mrkMenu("getFilterData",searchText)
+ *  	getAutoCompleteFilterData：	根据搜索条件过滤菜单数据,返回AutoComplete格式数据
+ *          用法：$(selector).mrkMenu("getAutoCompleteFilterData",searchText)
  *
  *
  * @author jiangbaojun
@@ -58,13 +61,13 @@
      * @param params    暴露方法参数
      */
     $.fn.mrkMenu = function (options, params) {
-    	//扩展方法
+        //扩展方法
         if (typeof options == "string") {
             var method = $.fn.mrkMenu.methods[options];
             if (method) return method(this, params);
         }
-    	//扩展默认配置选项数据
-    	extendDefault(this, options);
+        //扩展默认配置选项数据
+        extendDefault(this, options);
         //初始化控件
         init(this, params);
     };
@@ -77,17 +80,22 @@
          * @param target    target
          * @param text      过滤文本
          */
-		"search": function(target, text){
-			activeOptions.searchText = text;
-			//根据搜索条件过滤菜单数据
-	        activeOptions = filterMenuData(activeOptions);
-			init(target, text);
-		},
-		"getFilterData": function(target, text){
-			//根据搜索条件,返回过滤菜单数据
-            return getFilterData(activeOptions.originData, text)
-		}
-	};
+        "search": function(target, text){
+            activeOptions.searchText = text;
+            //根据搜索条件过滤菜单数据
+            activeOptions = filterMenuData(activeOptions);
+            init(target, text);
+        },
+        "getFilterData": function(target, text){
+            //根据搜索条件,返回过滤菜单数据
+            return getFilterData(activeOptions.originData, text);
+        },
+        "getAutoCompleteFilterData": function(target, text){
+            //根据搜索条件过滤菜单数据,返回AutoComplete格式数据
+            var directMenuArr = getFilterData(activeOptions.originData, text)
+            return getAutoCompleteFilterData(directMenuArr);
+        }
+    };
     /**
      * 控件默认配置选项
      */
@@ -100,26 +108,27 @@
         unFoldTime: 200,
         foldTime: 200,
         remberFlodState: false,
+        forceRemberSonFlodState: true,
         onlyUnfold: true,
         searchResultToTree: false,
         onClickMenu: function(target){}
     };
     var activeOptions = $.fn.mrkMenu.defaultOptions;
-    
+
     /**
      * 扩展默认配置选项数据
      * @param options   初始化配置选项，用于替换控件默认配置选项
      */
     function extendDefault(target, options){
-    	//不可自定义默认配置
-    	var innerDefaultOptions = {
-			menuStartIndex: 1,
-			searchText: "",
-			originData: options.menuData,
-			originTarget: target,
-			originMenuRootId: options.menuRootId,
-			searchPid: "search-root"
-    	};
+        //不可自定义默认配置
+        var innerDefaultOptions = {
+            menuStartIndex: 1,
+            searchText: "",
+            originData: options.menuData,
+            originTarget: target,
+            originMenuRootId: options.menuRootId,
+            searchPid: "search-root"
+        };
         //扩展自定义配置
         var opts = $.extend({}, $.fn.mrkMenu.defaultOptions);
         activeOptions = $.extend(true, opts, options, innerDefaultOptions);
@@ -134,28 +143,28 @@
         target.html("");
         createMenus(target,activeOptions.menuRootId,activeOptions.menuStartIndex);
     }
-    
+
     /**
      * 根据搜索条件过滤菜单数据
      * @param activeOptions  控件输入参数
      */
     function filterMenuData(activeOptions){
-    	var searchText = activeOptions.searchText;
-    	var menuData = activeOptions.originData;
-    	if(searchText==null || searchText==undefined || searchText==""){
+        var searchText = activeOptions.searchText;
+        var menuData = activeOptions.originData;
+        if(searchText==null || searchText==undefined || searchText==""){
             activeOptions.menuData = activeOptions.originData;
             activeOptions.menuRootId = activeOptions.originMenuRootId;
-    		return activeOptions;
-    	}
+            return activeOptions;
+        }
         var filterData = getFilterData(menuData, searchText);
-    	if(activeOptions.searchResultToTree){
-    		//树形结果展示，需要获得所有父节点
-    		activeOptions.menuData = getAllParents(filterData);
-    	}else{
-    		activeOptions.menuRootId = activeOptions.searchPid;
-    		activeOptions.menuData = filterData;
-    	}
-    	return activeOptions;
+        if(activeOptions.searchResultToTree){
+            //树形结果展示，需要获得所有父节点
+            activeOptions.menuData = getAllParents(filterData);
+        }else{
+            activeOptions.menuRootId = activeOptions.searchPid;
+            activeOptions.menuData = filterData;
+        }
+        return activeOptions;
     }
 
     /**
@@ -182,6 +191,17 @@
         }
         return filterData;
     }
+    /**
+     * 根据搜索条件过滤菜单数据,返回AutoComplete格式数据
+     */
+    function getAutoCompleteFilterData(directMenuArr){
+        var filterData = [];
+        for(var i=0;i<directMenuArr.length;i++){
+            var item = directMenuArr[i];
+            filterData.push({"value":item.title,"data":item});
+        }
+        return filterData;
+    }
 
     /**
      * 判断当前节点是否有子节点
@@ -189,85 +209,85 @@
      * @param id  		当前节点id
      */
     function hasChildren(menuData,id){
-    	for(var i=0;i<menuData.length;i++){
-    		var item = menuData[i];
-    		if(item.parentId == id){
-    			return true
-    		}
-    	}
-    	return false;
+        for(var i=0;i<menuData.length;i++){
+            var item = menuData[i];
+            if(item.parentId == id){
+                return true
+            }
+        }
+        return false;
     }
-    
+
     /**
      * 获得给定节点数组的所有父节点
      * @param filterData  给定节点数组
      */
     function getAllParents(filterData){
-    	var resultArr = filterData;
-    	var noRepeatPids = [];
-    	for(var i=0;i<filterData.length;i++){
-    		var item = filterData[i];
-    		//filterData内相同父节点的节点，获得一次就可以
-    		if(!containItem(noRepeatPids, item.parentId)){
-    			noRepeatPids.push(item.parentId);
-    			var parentNodes = getParents(item,[]);
-    			//去除重复节点
-    			for(var k=0;k<parentNodes.length;k++){
-    				if(!containNode(resultArr, parentNodes[k])){
-    					resultArr.push(parentNodes[k]);
-    				}
-    			}
-    		}
-    	}
-    	return resultArr;
+        var resultArr = filterData;
+        var noRepeatPids = [];
+        for(var i=0;i<filterData.length;i++){
+            var item = filterData[i];
+            //filterData内相同父节点的节点，获得一次就可以
+            if(!containItem(noRepeatPids, item.parentId)){
+                noRepeatPids.push(item.parentId);
+                var parentNodes = getParents(item,[]);
+                //去除重复节点
+                for(var k=0;k<parentNodes.length;k++){
+                    if(!containNode(resultArr, parentNodes[k])){
+                        resultArr.push(parentNodes[k]);
+                    }
+                }
+            }
+        }
+        return resultArr;
     }
-    
+
     /**
      * 数组包含判断
      */
     function containItem(ids, id){
-    	for(var i=0;i<ids.length;i++){
-    		if(ids[i] == id){
-    			return true;
-    		}
-    	}
-    	return false;
+        for(var i=0;i<ids.length;i++){
+            if(ids[i] == id){
+                return true;
+            }
+        }
+        return false;
     }
-    
+
     /**
      * 节点包含判断
      */
     function containNode(arr, item){
-    	for(var i=0;i<arr.length;i++){
-    		if(arr[i].id == item.id){
-    			return true;
-    		}
-    	}
-    	return false;
+        for(var i=0;i<arr.length;i++){
+            if(arr[i].id == item.id){
+                return true;
+            }
+        }
+        return false;
     }
-    
+
     /**
      * 获得给定节点的所有父节点,不包含当前节点
      * @param item  给定节点
      * @param result  累加结果数据
      */
     function getParents(item,result){
-    	var menuData = activeOptions.originData;
-    	var parentNode = null;
-    	for(var i=0;i<menuData.length;i++){
-    		var temp = menuData[i];
-    		if(temp.id == item.parentId){
-    			parentNode= temp;
-    			break;
-    		}
-    	}
-    	if(parentNode != null){
-    		result.push(parentNode);
-    		getParents(parentNode,result);
-    	}
-    	return result;
+        var menuData = activeOptions.originData;
+        var parentNode = null;
+        for(var i=0;i<menuData.length;i++){
+            var temp = menuData[i];
+            if(temp.id == item.parentId){
+                parentNode= temp;
+                break;
+            }
+        }
+        if(parentNode != null){
+            result.push(parentNode);
+            getParents(parentNode,result);
+        }
+        return result;
     }
-    
+
     /* 创建菜单dom元素
     * @param target     菜单根节点jquery对象
     * @param id         菜单数据根节点id值
@@ -314,7 +334,7 @@
             var that = this;
             //判断是折叠展开菜单，还是浮动菜单(注意是递归前调用j-1)
             if(j-1<activeOptions.startFloatLevel || activeOptions.startFloatLevel<2) {
-            /******************************* flod菜单 *********************************************/
+                /******************************* flod菜单 *********************************************/
                 var li = $('<li />').addClass("treeview "+tagClassMd).appendTo(target);
                 $("<div/>").addClass("hover-sign "+tagClassMd).appendTo(li);
                 var li_a = $('<a/>').attr({"href": this.url || "javascript:void(0)", "menuId": this.id})
@@ -335,7 +355,7 @@
                 var childrenUL = $('<ul class="treeview-menu" />');
                 createMenus(childrenUL, that.id, j + 1);
                 if (childrenUL.children().length) {
-                    li.addClass("dropdown-menu");
+                    li.addClass("dropdown-menus");
                     childrenUL.addClass('treeview-level-' + j);
                     //子级菜单缩进
                     if(j!=activeOptions.startFloatLevel){
@@ -360,25 +380,38 @@
                         $(this).parentsUntil(activeOptions.originTarget, "li").find(">a").addClass("selected");
                         //是否已经展开
                         if (!$(this).hasClass("open")) {
-                            //父级节点未展开，且单节点展开，折叠其他菜单（去掉open属性）
-                            if (activeOptions.onlyUnfold && li.closest("li.open").length < 1) {
-                                var foldSelector = "";
-                                if (activeOptions.remberFlodState) {
-                                    //只折叠一级菜单选择器
-                                    foldSelector = ">ul>li.md";
-                                } else {
-                                    //折叠所有菜单选择器
-                                    foldSelector = "li.md";
+                            //单节点展开，折叠其他菜单（去掉open属性）
+                            if (activeOptions.onlyUnfold) {
+                                //父级节点未展开
+                                if(li.closest("li.open").length < 1){
+                                    var foldSelector = "";
+                                    if (activeOptions.remberFlodState) {
+                                        //只折叠一级菜单选择器
+                                        foldSelector = ">ul>li.md";
+                                    } else {
+                                        //折叠所有菜单选择器
+                                        foldSelector = "li.md";
+                                    }
+                                    activeOptions.originTarget.find(foldSelector).find(">ul").slideUp(activeOptions.foldTime);
+                                    activeOptions.originTarget.find(foldSelector).removeClass("open");
                                 }
-                                activeOptions.originTarget.find(foldSelector).find(">ul").slideUp(activeOptions.foldTime);
-                                activeOptions.originTarget.find(foldSelector).removeClass("open");
                             }
                             //展开当前
                             li.find(">ul").slideDown(activeOptions.unFoldTime);
                             $(this).addClass("open");
                         } else {
-                            $(this).find(">ul").slideUp(activeOptions.foldTime);
-                            $(this).removeClass("open");
+                            var foldSelector = "";
+                            if (activeOptions.remberFlodState || activeOptions.forceRemberSonFlodState) {
+                                //只折叠当前
+                                $(this).find(">ul").slideUp(activeOptions.foldTime);
+                                $(this).removeClass("open");
+                            } else {
+                                //折叠所有已展开的子节点
+                                $(this).find(">ul").slideUp(activeOptions.foldTime);
+                                $(this).removeClass("open");
+                                $(this).find("li.open.md>ul").slideUp(activeOptions.foldTime);
+                                $(this).find("li.open.md").removeClass("open");
+                            }
                         }
                         e.preventDefault();
                         e.stopPropagation();
@@ -440,7 +473,7 @@
                 var childrenUL = $('<ul class="treeview-menu" />');
                 createMenus(childrenUL, that.id, j + 1);
                 if (childrenUL.children().length) {
-                    li.addClass("dropdown-menu");
+                    li.addClass("dropdown-menus");
                     childrenUL.addClass('treeview-level-' + j);
 
                     // //子级菜单缩进

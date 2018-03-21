@@ -21,11 +21,11 @@ a{ text-decoration: none;}
     font-weight: bold;
 }
 /*一级菜单图标文本对齐样式-没有图标*/
-.menu-container ul.menu-root > li.md > a.no-icon > span.menu-text{
+.menu-container ul.menu-root > li.md > a.no-icon > span.menu-title{
     margin-left: 45px;
 }
 /*一级菜单图标文本对齐样式-text*/
-.menu-container ul.menu-root > li.md > a.md > .menu-text{
+.menu-container ul.menu-root > li.md > a.md > .menu-title{
     line-height: 40px;
     margin-left: 5px;
 }
@@ -55,11 +55,11 @@ a{ text-decoration: none;}
     font-weight: bold;
 }
 /*二级及以下级别菜单图标文本对齐样式-没有图标*/
-.menu-container ul.menu-root > li.md > ul > li.md a.md.no-icon > span.menu-text {
+.menu-container ul.menu-root > li.md > ul > li.md a.md.no-icon > span.menu-title {
     margin-left: 27px;
 }
 /*二级及以下级别菜单图标文本对齐样式-text*/
-.menu-container ul.menu-root > li.md > ul.md > li a.md > .menu-text{
+.menu-container ul.menu-root > li.md > ul.md > li a.md > .menu-title{
     line-height: 40px;
     margin-left: 5px;
 }

@@ -317,7 +317,7 @@
             /******************************* flod菜单 *********************************************/
                 var li = $('<li />').addClass("treeview "+tagClassMd).appendTo(target);
                 $("<div/>").addClass("hover-sign "+tagClassMd).appendTo(li);
-                var li_a = $('<a/>').attr({"href": this.url || "#", "menuId": this.id})
+                var li_a = $('<a/>').attr({"href": this.url || "javascript:void(0)", "menuId": this.id})
                     .addClass(this.url === '' ? '' : 'menu-item')
                     .addClass(tagClassMd)
                     .appendTo(li);
@@ -330,7 +330,7 @@
                     li_a.addClass("no-icon");
                 }
                 // title
-                $('<span class="menu-text '+tagClassMd+'" />').text(this.title).appendTo(li_a);
+                $('<span class="menu-title '+tagClassMd+'" />').text(this.title).appendTo(li_a);
 
                 var childrenUL = $('<ul class="treeview-menu" />');
                 createMenus(childrenUL, that.id, j + 1);
@@ -435,7 +435,7 @@
                     li_a.addClass("no-icon");
                 }
                 // title
-                $('<span class="menu-text '+tagClassTempMt+'" />').text(this.title).appendTo(li_a);
+                $('<span class="menu-title '+tagClassTempMt+'" />').text(this.title).appendTo(li_a);
 
                 var childrenUL = $('<ul class="treeview-menu" />');
                 createMenus(childrenUL, that.id, j + 1);

@@ -25,7 +25,7 @@
  *                  unFoldTime：         子菜单展开动画时间值（number，毫秒），默认200
  *                  headerText：         菜单header文本，默认"",
  *                  onlyUnfold ：        一级菜单是否始终只展开一个节点，默认true
- *                  remberFlodState ：   是否记住子节点的折叠展开状态，默认false
+ *                  remberSonFlodState ：   是否记住子节点的折叠展开状态，默认true
  *                  searchResultToTree： 每次过滤搜索，是否以树形展示过滤结果，默认false
  *                  onClickMenu:	     事件，点击菜单节点时的回调函数。
  *                                          function(data)，data为回调函数参数，object，字段如下：
@@ -39,6 +39,8 @@
  *  		用法：$(selector).mrkMenu("search",searchText)
  *  	getFilterData：	根据搜索条件,返回过滤菜单数据
  *          用法：$(selector).mrkMenu("getFilterData",searchText)
+ *  	getAutoCompleteFilterData：	根据搜索条件过滤菜单数据,返回AutoComplete格式数据
+ *          用法：$(selector).mrkMenu("getAutoCompleteFilterData",searchText)
  *
  *
  * @author jiangbaojun

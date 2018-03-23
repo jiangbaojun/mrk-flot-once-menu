@@ -5,7 +5,55 @@
 /* How to use? : Check the GitHub README
 /* v1.0
 /* ----------------------------------------------- */
-
+/*
+ *
+var menuData=[
+	{id:"1", parentId: "0", title:"员工管理",iconSrc:"", url: "", orderNum: 1 },
+	{id:"2", parentId: "0", title:"系统管理",iconSrc:"", url: "", orderNum: 2 },
+	{id:"3", parentId: "0", title:"部门管理",iconSrc:"", url: "", orderNum: 3 },
+	{id:"4", parentId: "0", title:"财务管理",iconSrc:"", url: "", orderNum: 4 },
+	{id:"5", parentId: "0", title:"商城管理",iconSrc:"", url: "", orderNum: 5 },
+	{id:"A010", parentId: "0", title:"多级菜单",iconSrc:"", url: "", orderNum: 6 },
+	
+	{id:"11", parentId: "1", title:"员工列表", iconSrc:"", url: "demo/vsttxl/index.do", orderNum: 1 },
+	
+	{id:"21", parentId: "2", title:"菜单管理", iconSrc:"", "url":"demo.html", orderNum: 1},
+	{id:"22", parentId: "2", title:"添加用户", iconSrc:"", "url":"demo.html", orderNum: 2},
+	{id:"23", parentId: "2", title:"用户管理", iconSrc:"", "url":"demo2.html", orderNum: 3},
+	{id:"24", parentId: "2", title:"角色管理", iconSrc:"", "url":"demo2.html", orderNum: 4},
+	{id:"25", parentId: "2", title:"权限设置", iconSrc:"", "url":"demo.html", orderNum: 5},
+	{id:"26", parentId: "2", title:"系统日志", iconSrc:"", "url":"demo.html", orderNum: 6},
+	
+	{id:"31", parentId: "3", title:"添加部门", iconSrc:"", "url":"demo1.html", orderNum: 1},
+	{id:"32", parentId: "3", title:"部门列表", iconSrc:"", "url":"demo2.html", orderNum: 2},
+	
+	{id:"41", parentId: "4", title:"收支分类", iconSrc:"", url: "demo.html", orderNum: 1 },
+	{id:"42", parentId: "4", title:"报表统计", iconSrc:"", url: "demo1.html", orderNum: 2 },
+	{id:"43", parentId: "4", title:"添加支出", iconSrc:"", url: "demo.html", orderNum: 3 },
+	
+	{id:"51", parentId: "5", title:"商品分类", iconSrc:"", url: "demo.html", orderNum: 1 },
+	{id:"52", parentId: "5", title:"商品列表", iconSrc:"", url: "demo.html", orderNum: 2 },
+	{id:"53", parentId: "5", title:"商品订单", iconSrc:"", url: "demo.html", orderNum: 3 },
+    
+	{id:"A010-B001", parentId: "A010", title:"A-B001", iconSrc:"", url: "", orderNum: 1 },
+    {id:"A010-B002", parentId: "A010", title:"A-B002", iconSrc:"", url: "", orderNum: 2 },
+    
+    {id:"B001-C001", parentId: "A010-B001", title:"B-C001", iconSrc:"", url: "", orderNum: 1 },
+    {id:"B001-C002", parentId: "A010-B001", title:"B-C002", iconSrc:"", url: "", orderNum: 2 },
+    {id:"B001-C003", parentId: "A010-B001", title:"B-C003", iconSrc:"", url: "", orderNum: 3 },
+    
+    {id:"C002-D001", parentId: "B001-C002", title:"C-D0021", iconSrc:"", url: "", orderNum: 2 },
+    {id:"C002-D002", parentId: "B001-C002", title:"C-D0022", iconSrc:"", url: "", orderNum: 1 },
+    
+    {id:"C003-D001", parentId: "B001-C003", title:"C-D0031", iconSrc:"", url: "", orderNum: 1 },
+    {id:"C003-D002", parentId: "B001-C003", title:"C-D0032", iconSrc:"", url: "", orderNum: 2 },
+    
+    {id:"D002-E001", parentId: "C002-D002", title:"D-E001", iconSrc:"", url: "", orderNum: 1 },
+    {id:"D002-E002", parentId: "C002-D002", title:"D-E002", iconSrc:"", url: "", orderNum: 2 },
+    {id:"D002-E003", parentId: "C002-D002", title:"D-E003", iconSrc:"", url: "", orderNum: 3 }
+	
+];
+ */
 
 /**
  * 折叠展开菜单，指定级别开始浮动
@@ -32,8 +80,7 @@
  *                  unFoldTime：         子菜单展开动画时间值（number，毫秒），默认200
  *                  headerText：         菜单header文本，默认"",
  *                  onlyUnfold ：        一级菜单是否始终只展开一个节点，默认true
- *                  remberFlodState ：   是否记住子节点的折叠展开状态，默认false
- *                  forceRemberSonFlodState ：   强制记住子节点展开状态，点击一级菜单还原。默认true
+ *                  remberSonFlodState ：   是否记住子节点的折叠展开状态，默认true
  *                  searchResultToTree： 每次过滤搜索，是否以树形展示过滤结果，默认false
  *                  onClickMenu:	     事件，点击菜单节点时的回调函数。
  *                                          function(data)，data为回调函数参数，object，字段如下：
@@ -61,13 +108,13 @@
      * @param params    暴露方法参数
      */
     $.fn.mrkMenu = function (options, params) {
-        //扩展方法
+    	//扩展方法
         if (typeof options == "string") {
             var method = $.fn.mrkMenu.methods[options];
             if (method) return method(this, params);
         }
-        //扩展默认配置选项数据
-        extendDefault(this, options);
+    	//扩展默认配置选项数据
+    	extendDefault(this, options);
         //初始化控件
         init(this, params);
     };
@@ -80,22 +127,22 @@
          * @param target    target
          * @param text      过滤文本
          */
-        "search": function(target, text){
-            activeOptions.searchText = text;
-            //根据搜索条件过滤菜单数据
-            activeOptions = filterMenuData(activeOptions);
-            init(target, text);
-        },
-        "getFilterData": function(target, text){
-            //根据搜索条件,返回过滤菜单数据
+		"search": function(target, text){
+			activeOptions.searchText = text;
+			//根据搜索条件过滤菜单数据
+	        activeOptions = filterMenuData(activeOptions);
+			init(target, text);
+		},
+		"getFilterData": function(target, text){
+			//根据搜索条件,返回过滤菜单数据
             return getFilterData(activeOptions.originData, text);
-        },
-        "getAutoCompleteFilterData": function(target, text){
-            //根据搜索条件过滤菜单数据,返回AutoComplete格式数据
-            var directMenuArr = getFilterData(activeOptions.originData, text)
+		},
+		"getAutoCompleteFilterData": function(target, text){
+			//根据搜索条件过滤菜单数据,返回AutoComplete格式数据
+			var directMenuArr = getFilterData(activeOptions.originData, text)
             return getAutoCompleteFilterData(directMenuArr);
-        }
-    };
+		}
+	};
     /**
      * 控件默认配置选项
      */
@@ -107,28 +154,27 @@
         headerText: "",
         unFoldTime: 200,
         foldTime: 200,
-        remberFlodState: false,
-        forceRemberSonFlodState: true,
+        remberSonFlodState: true,
         onlyUnfold: true,
         searchResultToTree: false,
         onClickMenu: function(target){}
     };
     var activeOptions = $.fn.mrkMenu.defaultOptions;
-
+    
     /**
      * 扩展默认配置选项数据
      * @param options   初始化配置选项，用于替换控件默认配置选项
      */
     function extendDefault(target, options){
-        //不可自定义默认配置
-        var innerDefaultOptions = {
-            menuStartIndex: 1,
-            searchText: "",
-            originData: options.menuData,
-            originTarget: target,
-            originMenuRootId: options.menuRootId,
-            searchPid: "search-root"
-        };
+    	//不可自定义默认配置
+    	var innerDefaultOptions = {
+			menuStartIndex: 1,
+			searchText: "",
+			originData: options.menuData,
+			originTarget: target,
+			originMenuRootId: options.menuRootId,
+			searchPid: "search-root"
+    	};
         //扩展自定义配置
         var opts = $.extend({}, $.fn.mrkMenu.defaultOptions);
         activeOptions = $.extend(true, opts, options, innerDefaultOptions);
@@ -143,28 +189,28 @@
         target.html("");
         createMenus(target,activeOptions.menuRootId,activeOptions.menuStartIndex);
     }
-
+    
     /**
      * 根据搜索条件过滤菜单数据
      * @param activeOptions  控件输入参数
      */
     function filterMenuData(activeOptions){
-        var searchText = activeOptions.searchText;
-        var menuData = activeOptions.originData;
-        if(searchText==null || searchText==undefined || searchText==""){
+    	var searchText = activeOptions.searchText;
+    	var menuData = activeOptions.originData;
+    	if(searchText==null || searchText==undefined || searchText==""){
             activeOptions.menuData = activeOptions.originData;
             activeOptions.menuRootId = activeOptions.originMenuRootId;
-            return activeOptions;
-        }
+    		return activeOptions;
+    	}
         var filterData = getFilterData(menuData, searchText);
-        if(activeOptions.searchResultToTree){
-            //树形结果展示，需要获得所有父节点
-            activeOptions.menuData = getAllParents(filterData);
-        }else{
-            activeOptions.menuRootId = activeOptions.searchPid;
-            activeOptions.menuData = filterData;
-        }
-        return activeOptions;
+    	if(activeOptions.searchResultToTree){
+    		//树形结果展示，需要获得所有父节点
+    		activeOptions.menuData = getAllParents(filterData);
+    	}else{
+    		activeOptions.menuRootId = activeOptions.searchPid;
+    		activeOptions.menuData = filterData;
+    	}
+    	return activeOptions;
     }
 
     /**
@@ -195,12 +241,12 @@
      * 根据搜索条件过滤菜单数据,返回AutoComplete格式数据
      */
     function getAutoCompleteFilterData(directMenuArr){
-        var filterData = [];
-        for(var i=0;i<directMenuArr.length;i++){
+    	var filterData = [];
+    	for(var i=0;i<directMenuArr.length;i++){
             var item = directMenuArr[i];
             filterData.push({"value":item.title,"data":item});
-        }
-        return filterData;
+    	}
+    	return filterData;
     }
 
     /**
@@ -209,85 +255,85 @@
      * @param id  		当前节点id
      */
     function hasChildren(menuData,id){
-        for(var i=0;i<menuData.length;i++){
-            var item = menuData[i];
-            if(item.parentId == id){
-                return true
-            }
-        }
-        return false;
+    	for(var i=0;i<menuData.length;i++){
+    		var item = menuData[i];
+    		if(item.parentId == id){
+    			return true
+    		}
+    	}
+    	return false;
     }
-
+    
     /**
      * 获得给定节点数组的所有父节点
      * @param filterData  给定节点数组
      */
     function getAllParents(filterData){
-        var resultArr = filterData;
-        var noRepeatPids = [];
-        for(var i=0;i<filterData.length;i++){
-            var item = filterData[i];
-            //filterData内相同父节点的节点，获得一次就可以
-            if(!containItem(noRepeatPids, item.parentId)){
-                noRepeatPids.push(item.parentId);
-                var parentNodes = getParents(item,[]);
-                //去除重复节点
-                for(var k=0;k<parentNodes.length;k++){
-                    if(!containNode(resultArr, parentNodes[k])){
-                        resultArr.push(parentNodes[k]);
-                    }
-                }
-            }
-        }
-        return resultArr;
+    	var resultArr = filterData;
+    	var noRepeatPids = [];
+    	for(var i=0;i<filterData.length;i++){
+    		var item = filterData[i];
+    		//filterData内相同父节点的节点，获得一次就可以
+    		if(!containItem(noRepeatPids, item.parentId)){
+    			noRepeatPids.push(item.parentId);
+    			var parentNodes = getParents(item,[]);
+    			//去除重复节点
+    			for(var k=0;k<parentNodes.length;k++){
+    				if(!containNode(resultArr, parentNodes[k])){
+    					resultArr.push(parentNodes[k]);
+    				}
+    			}
+    		}
+    	}
+    	return resultArr;
     }
-
+    
     /**
      * 数组包含判断
      */
     function containItem(ids, id){
-        for(var i=0;i<ids.length;i++){
-            if(ids[i] == id){
-                return true;
-            }
-        }
-        return false;
+    	for(var i=0;i<ids.length;i++){
+    		if(ids[i] == id){
+    			return true;
+    		}
+    	}
+    	return false;
     }
-
+    
     /**
      * 节点包含判断
      */
     function containNode(arr, item){
-        for(var i=0;i<arr.length;i++){
-            if(arr[i].id == item.id){
-                return true;
-            }
-        }
-        return false;
+    	for(var i=0;i<arr.length;i++){
+    		if(arr[i].id == item.id){
+    			return true;
+    		}
+    	}
+    	return false;
     }
-
+    
     /**
      * 获得给定节点的所有父节点,不包含当前节点
      * @param item  给定节点
      * @param result  累加结果数据
      */
     function getParents(item,result){
-        var menuData = activeOptions.originData;
-        var parentNode = null;
-        for(var i=0;i<menuData.length;i++){
-            var temp = menuData[i];
-            if(temp.id == item.parentId){
-                parentNode= temp;
-                break;
-            }
-        }
-        if(parentNode != null){
-            result.push(parentNode);
-            getParents(parentNode,result);
-        }
-        return result;
+    	var menuData = activeOptions.originData;
+    	var parentNode = null;
+    	for(var i=0;i<menuData.length;i++){
+    		var temp = menuData[i];
+    		if(temp.id == item.parentId){
+    			parentNode= temp;
+    			break;
+    		}
+    	}
+    	if(parentNode != null){
+    		result.push(parentNode);
+    		getParents(parentNode,result);
+    	}
+    	return result;
     }
-
+    
     /* 创建菜单dom元素
     * @param target     菜单根节点jquery对象
     * @param id         菜单数据根节点id值
@@ -334,7 +380,7 @@
             var that = this;
             //判断是折叠展开菜单，还是浮动菜单(注意是递归前调用j-1)
             if(j-1<activeOptions.startFloatLevel || activeOptions.startFloatLevel<2) {
-                /******************************* flod菜单 *********************************************/
+            /******************************* flod菜单 *********************************************/
                 var li = $('<li />').addClass("treeview "+tagClassMd).appendTo(target);
                 $("<div/>").addClass("hover-sign "+tagClassMd).appendTo(li);
                 var li_a = $('<a/>').attr({"href": this.url || "javascript:void(0)", "menuId": this.id})
@@ -382,36 +428,33 @@
                         if (!$(this).hasClass("open")) {
                             //单节点展开，折叠其他菜单（去掉open属性）
                             if (activeOptions.onlyUnfold) {
-                                //父级节点未展开
-                                if(li.closest("li.open").length < 1){
-                                    var foldSelector = "";
-                                    if (activeOptions.remberFlodState) {
-                                        //只折叠一级菜单选择器
-                                        foldSelector = ">ul>li.md";
-                                    } else {
-                                        //折叠所有菜单选择器
-                                        foldSelector = "li.md";
-                                    }
-                                    activeOptions.originTarget.find(foldSelector).find(">ul").slideUp(activeOptions.foldTime);
-                                    activeOptions.originTarget.find(foldSelector).removeClass("open");
-                                }
+                            	var foldSelector = "";
+                        		if (activeOptions.remberSonFlodState) {
+                        			//只折叠同级别菜单
+                        			foldSelector = ">li.open.md";
+                        		} else {
+                        			//折叠所有菜单选择器
+                        			foldSelector = "li.open.md";
+                        		}
+                    			li.parent().find(foldSelector).find(">ul").slideUp(activeOptions.foldTime);
+                    			li.parent().find(foldSelector).removeClass("open");
                             }
                             //展开当前
                             li.find(">ul").slideDown(activeOptions.unFoldTime);
                             $(this).addClass("open");
                         } else {
-                            var foldSelector = "";
-                            if (activeOptions.remberFlodState || activeOptions.forceRemberSonFlodState) {
-                                //只折叠当前
-                                $(this).find(">ul").slideUp(activeOptions.foldTime);
+                        	var foldSelector = "";
+                    		if (activeOptions.remberSonFlodState) {
+                    			//只折叠当前
+                    			$(this).find(">ul").slideUp(activeOptions.foldTime);
                                 $(this).removeClass("open");
-                            } else {
-                                //折叠所有已展开的子节点
-                                $(this).find(">ul").slideUp(activeOptions.foldTime);
-                                $(this).removeClass("open");
-                                $(this).find("li.open.md>ul").slideUp(activeOptions.foldTime);
+                    		} else {
+                    			//折叠所有已展开的子节点
+                    			$(this).find(">ul").slideUp(activeOptions.foldTime);
+                    			$(this).removeClass("open");
+                    			$(this).find("li.open.md>ul").slideUp(activeOptions.foldTime);
                                 $(this).find("li.open.md").removeClass("open");
-                            }
+                    		}
                         }
                         e.preventDefault();
                         e.stopPropagation();

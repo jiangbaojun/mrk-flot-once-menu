@@ -121,7 +121,7 @@ a{ text-decoration: none;}
     color: #1A7AB9;
 }
 /*二级及以下级别菜单容器初始样式*/
-.menu-container ul.menu-root > li.md > ul.md{
+.menu-container ul.menu-root > li.md ul.md{
     display: none;
 }
 /*展开折叠的箭头*/
